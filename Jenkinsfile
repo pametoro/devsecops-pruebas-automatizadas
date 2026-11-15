@@ -30,7 +30,8 @@ pipeline {
                         -Dsonar.projectKey=app-vulnerable-flask \
                         -Dsonar.projectName="App Vulnerable Flask" \
                         -Dsonar.sources=. \
-                        -Dsonar.python.version=3.9
+                        -Dsonar.python.version=3.9 \
+                        -Dsonar.token=${SONAR_AUTH_TOKEN}
                     """
                 }
             }
