@@ -25,14 +25,16 @@ pipeline {
             steps {
                 echo 'Ejecutando analisis estatico de calidad y seguridad con SonarQube...'
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh """
-                        ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=app-vulnerable-flask \
-                        -Dsonar.projectName="App Vulnerable Flask" \
-                        -Dsonar.sources=. \
-                        -Dsonar.python.version=3.9 \
-                        -Dsonar.token=${SONAR_AUTH_TOKEN}
-                    """
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'TOKEN_SONAR')]) {
+                        sh '''
+                            ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectKey=app-vulnerable-flask \
+                            -Dsonar.projectName="App Vulnerable Flask" \
+                            -Dsonar.sources=. \
+                            -Dsonar.python.version=3.9 \
+                            -Dsonar.token=${TOKEN_SONAR}
+                        '''
+                    }
                 }
             }
         }
