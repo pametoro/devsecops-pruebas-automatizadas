@@ -42,7 +42,9 @@ pipeline {
         stage('Security Test') {
             steps {
                 echo 'Ejecutando analisis de dependencias con OWASP Dependency-Check...'
-                dependencyCheck additionalArguments: '--scan ./requirements.txt --format HTML --format XML', odcInstallation: 'DP-Check'
+                withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_KEY')]) {
+                    dependencyCheck additionalArguments: "--scan ./requirements.txt --format HTML --format XML --nvdApiKey ${NVD_KEY}", odcInstallation: 'DP-Check'
+                }
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
